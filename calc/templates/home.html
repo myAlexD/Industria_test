@@ -1,0 +1,25 @@
+{% extends 'calc/base.html' %}
+{% block content %}
+<table>
+    <tr>
+        <th>Currency Abreviation</th>
+        <th>Currency Rate</th>
+        <th>Currency Rate</th>
+        <th>Reversed Rate</th>
+    </tr>
+    {% for key,value in data.items %}
+    <tr>
+        <td>
+            {{ key }}
+        </td>
+        {% for values in value %}
+        <td>
+            {{ values }}
+        </td>
+        {% endfor %}
+    </tr>   
+    {% endfor %}
+</table>
+<br/>
+<a href="{% url 'calculator' %}">Go to calculator</a>
+{% endblock content %}

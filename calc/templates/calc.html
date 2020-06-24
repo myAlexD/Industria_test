@@ -1,0 +1,52 @@
+{% extends 'calc/base.html' %}
+{% block content %}
+<script type="text/javascript">
+    $(document).on("submit", function(e) {
+        console.log(e.target.attributes["target_url"].textContent)
+        var form = document.getElementById("calc_form")
+        console.log(form.currency_in.value)
+        $.ajax({
+            method: "POST",
+            url: e.target.attributes["target_url"].textContent,
+            data: {
+                'csrfmiddlewaretoken': e.target[0].attributes.value.textContent,
+                'currency_in': form.currency_in.value,
+                'currency_in_amt':form.currency_in_amt.value,
+                'currency_out':form.currency_out.value,
+            },
+            dataType: 'json',
+            success: function(data) {
+                console.log(form.currency_in.value)
+                console.log(form.currency_in_amt.value)
+                console.log(form.currency_in_amt.value)
+                form.input_2.value = data["output"]
+            }
+        });e.preventDefault();
+    })
+</script>
+
+<form target_url="{% url 'calculator' %}" action="{% url 'calculator' %}" method="POST" id="calc_form">
+    {% csrf_token %}
+    <input type="number" name="currency_in_amt" id="input_1">
+    <tr><th>
+        <label for="id_currency_in">Currency:</label></th><td>
+        <select name="currency_in" id="id_currency_in">
+        {% for option in form %}
+        <option value="{{ forloop.counter }}">{{ option }}</option>
+        {% endfor %}
+        </select></td></tr>
+    <br/>
+    <input type="number" name="currency_out_amt" id="input_2" disabled>
+    <tr><th>
+        <label for="id_currency_out">Currency:</label></th><td>
+        <select name="currency_out" id="id_currency_out">
+        {% for option in form %}
+        <option value="{{ forloop.counter }}">{{ option }}</option>
+        {% endfor %}
+        </select></td></tr>
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+
+<br/><a href="{% url 'home' %}">Go Back</a>
+{% endblock content %}
